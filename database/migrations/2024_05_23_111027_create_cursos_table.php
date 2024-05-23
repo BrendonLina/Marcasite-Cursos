@@ -13,8 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
+    
         Schema::create('cursos', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->double('value', 15, 2);
+            $table->integer('vacancies');
+            $table->date('registrations');
+            $table->date('registrations_up_to');
+            $table->string('description', 255);
+            $table->boolean('is_active')->default(true);
+            $table->string('image');
             $table->timestamps();
         });
     }

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreCourseRequest;
+use App\Http\Requests\UpdateCourseRequest;
 
 class DashboardController extends Controller
 {
@@ -19,9 +20,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $data = Auth::user()->name;
-
-        return view('dashboard.index', compact('data'));
+        return view('dashboard.index');
     }
 
     /**
@@ -64,7 +63,8 @@ class DashboardController extends Controller
      */
     public function edit($id)
     {
-        // return view('cursos.editar', compact('id'));
+        $curso = Curso::findOrFail($id);
+        return view('cursos.editar', compact('id','curso'));
     }
 
     /**
@@ -74,10 +74,51 @@ class DashboardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCourseRequest $request, $id)
     {
-        //
+        try{
+            
+            $curso = Curso::findOrFail($id);
+
+            $data = $request->only([
+                'name', 'value', 'vacancies', 'registrations', 
+                'registrations_up_to', 'description', 'is_active'
+            ]);
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+            $data['image'] = $imagePath;
+        } else {
+            $data['image'] = $curso->image;
+        }
+
+        if($data['image'] != null)
+        {
+            $curso->update($data);
+
+            return redirect()->route('cursos')->with('success', [
+                'title' => 'Parabéns!',
+                'message' => 'O ' . $request->name . ' foi editado com sucesso!',
+            ]);
+        }
+
+        $curso->update($data);
+
+        return redirect()->route('cursos')->with('success', [
+            'title' => 'Parabéns!',
+            'message' => 'O ' . $request->name . ' foi editado com sucesso!',
+        ]);
+
+    } catch (Exception $exception) {
+        return redirect()->back()->with('danger', [
+            'title' => 'Erro ao editar o curso:',
+            'message' => $exception->getMessage()
+        ]);
     }
+            
+    }
+    
+    
 
     /**
      * Remove the specified resource from storage.
@@ -92,14 +133,16 @@ class DashboardController extends Controller
 
     public function curso()
     {
-        return view('cursos.index');
+        $cursos = Curso::all();
+       
+        return view('cursos.index', compact('cursos'));
     }
 
     public function cadastrarCursos(StoreCourseRequest $request)
+    
     {
         try{
-            // $this->authorize('create', User::class);
-
+            
             $curso = Curso::create([
                 'name' => $request->name,
                 'value' => $request->value,
@@ -107,26 +150,36 @@ class DashboardController extends Controller
                 'registrations' => $request->registrations,
                 'registrations_up_to' => $request->registrations_up_to,
                 'description' => $request->description,
-                'is_active' => $request->is_active,
+                'is_active' => $request->boolean('is_active'),
                 'image' => $request->image,
             ]);
 
-            if($curso){
-                return redirect()->route('cadastrar.cursos')->with('success', [
+            if($curso['is_active'] == false)
+            {
+                return redirect()->route('cursos')->with('success', [
                     'title' => 'Parabéns!',
                     'message' => 'Curso ' . $request->name . ' foi criado com sucesso!',
                 ]);
-            } else {
-                return redirect()->back()->with('error', [
-                    'title' => 'Aconteceu um erro!',
-                    'message' => 'O Curso ' . $request->name . ' não foi criado.',
+            }
+
+            if($curso){
+                return redirect()->route('cursos')->with('success', [
+                    'title' => 'Parabéns!',
+                    'message' => 'Curso ' . $request->name . ' foi criado com sucesso!',
                 ]);
             }
-        } catch (Exception $exception) {
-            return redirect()->back()->with('error', [
-                'title' => 'Erro ao criar o usuário:',
-                'message' => $exception->getMessage()
-            ]);
-        }
-    }
+                else {
+                    return redirect()->back()->with('error', [
+                        'title' => 'Aconteceu um erro!',
+                        'message' => 'O curso ' . $request->name . ' não foi criado.',
+                    ]);
+                }
+            }
+                catch (Exception $exception) {
+                    return redirect()->back()->with('error', [
+                        'title' => 'Erro ao criar o curso:',
+                        'message' => $exception->getMessage()
+                    ]);
+                }
+     }
 }

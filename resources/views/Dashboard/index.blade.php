@@ -8,10 +8,6 @@
     <title>Dashboard</title>
 </head>
 <body>
-    {{-- <h1>Area adm</h1>
-    <p>Seja bem vindo {{$data}}</p>
-    <a href="{{route('cadastro.curso')}}">cadastrar curso</a>
-    <a href="{{route('logout')}}">Sair</a> --}}
 
 <style>
     .sidebar {
@@ -99,6 +95,7 @@
         <li class="list-group-item"><a href="{{route('cursos')}}">Cursos</a></li>
         <li class="list-group-item"><a href="#">Usuários</a></li>
         <li class="list-group-item"><a href="#">Configurações</a></li>
+        <li class="list-group-item"><a href="{{route('logout')}}">Sair</a></li>
     </ul>
 </div>
 </nav>
