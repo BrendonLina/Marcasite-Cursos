@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
-class LoginController extends Controller
+class AuthController extends Controller
 {
     public function index()
     {
@@ -14,6 +16,30 @@ class LoginController extends Controller
         }
 
         return view('index');
+    }
+
+    public function store(Request $request)
+    {
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'cpf' => $request->cpf,
+            'is_active' => 1,
+            'role_id' => 2,
+        ]);
+
+        if($user){
+            return redirect()->route('cadastro.usuario')->with('success', [
+                'title' => 'Parabéns!',
+                'message' => 'Usuário ' . $request->name . ' foi criado com sucesso!',
+            ]);
+        } else {
+            return redirect()->back()->with('error', [
+                'title' => 'Aconteceu um erro!',
+                'message' => 'O usuário ' . $request->name . ' não foi criado.',
+            ]);
+        }
     }
 
     public function login(Request $request)
@@ -47,5 +73,10 @@ class LoginController extends Controller
         auth()->logout();
 
         return redirect()->route('index');
+    }
+
+    public function cadastroAluno()
+    {
+        return view('cadastroaluno');
     }
 }

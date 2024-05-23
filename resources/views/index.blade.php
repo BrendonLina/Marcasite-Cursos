@@ -40,7 +40,7 @@
                 </div>
                 <div class="mb-3">
                     <input type="submit" class="btn btn-primary form-control" id="btn-entrar" value="Entrar">
-                    <a href="/cadastrar">Não tem conta? Cadastre-se!</a>
+                    <a href="{{route('cadastro.usuario')}}">Não tem conta? Cadastre-se!</a>
                 </div>
             </form>
         </div>

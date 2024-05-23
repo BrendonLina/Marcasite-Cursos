@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
+use App\Models\User;
+use App\Models\Curso;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\StoreCourseRequest;
 
 class DashboardController extends Controller
 {
@@ -13,7 +19,9 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        //
+        $data = Auth::user()->name;
+
+        return view('dashboard.index', compact('data'));
     }
 
     /**
@@ -56,7 +64,7 @@ class DashboardController extends Controller
      */
     public function edit($id)
     {
-        //
+        // return view('cursos.editar', compact('id'));
     }
 
     /**
@@ -80,5 +88,45 @@ class DashboardController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function curso()
+    {
+        return view('cursos.index');
+    }
+
+    public function cadastrarCursos(StoreCourseRequest $request)
+    {
+        try{
+            // $this->authorize('create', User::class);
+
+            $curso = Curso::create([
+                'name' => $request->name,
+                'value' => $request->value,
+                'vacancies' => $request->vacancies,
+                'registrations' => $request->registrations,
+                'registrations_up_to' => $request->registrations_up_to,
+                'description' => $request->description,
+                'is_active' => $request->is_active,
+                'image' => $request->image,
+            ]);
+
+            if($curso){
+                return redirect()->route('cadastrar.cursos')->with('success', [
+                    'title' => 'Parabéns!',
+                    'message' => 'Curso ' . $request->name . ' foi criado com sucesso!',
+                ]);
+            } else {
+                return redirect()->back()->with('error', [
+                    'title' => 'Aconteceu um erro!',
+                    'message' => 'O Curso ' . $request->name . ' não foi criado.',
+                ]);
+            }
+        } catch (Exception $exception) {
+            return redirect()->back()->with('error', [
+                'title' => 'Erro ao criar o usuário:',
+                'message' => $exception->getMessage()
+            ]);
+        }
     }
 }
