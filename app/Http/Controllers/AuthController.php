@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\StoreUserRequest;
 
 class AuthController extends Controller
 {
@@ -18,7 +19,7 @@ class AuthController extends Controller
         return view('index');
     }
 
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
         $user = User::create([
             'name' => $request->name,

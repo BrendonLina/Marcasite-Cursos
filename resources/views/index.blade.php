@@ -8,43 +8,44 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <title>Login</title>
 </head>
-<body>
+<body class="bg-light">
     
-    <div class="container-login">
-        <div class="login">  
-            <h4 class="title-login">Login</h4>
-            <form action="{{ route('login') }}" method="POST" >
-                @csrf
-    
-                @if(session('danger'))
-                    <div class="alert alert-danger">
-                        {{session('danger')}}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="login p-4 bg-white shadow rounded">
+                <h4 class="title-login mb-4">Login</h4>
+                <form action="{{ route('login') }}" method="POST">
+                    @csrf
+
+                    @if(session('danger'))
+                        <div class="alert alert-danger mb-3">{{ session('danger') }}</div>
+                    @endif
+                    @if(session('success'))
+                        <div class="alert alert-success mb-3">{{ session('success') }}</div>
+                    @endif
+                    <div class="mb-3">
+                        <input type="email" class="form-control" name="email" placeholder="Seu email">
+                        @error('email')
+                            <span>{{ $message }}</span>
+                        @enderror
                     </div>
-                @endif
-                @if(session('success'))
-                    <div class="alert alert-success">
-                        {{session('success')}}
+                    <div class="mb-3">
+                        <input type="password" class="form-control" name="password" placeholder="Senha">
+                        @error('password')
+                            <span>{{ $message }}</span>
+                        @enderror
                     </div>
-                @endif
-                <div class="mb-3">
-                    <input type="email" class="form-control" id="exampleFormControlInput1" name="email" placeholder="Seu email">
-                    @error('email')
-                        <span>{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="mb-3">
-                    <input type="password" class="form-control" id="exampleFormControlInput" name="password" placeholder="Senha" >
-                    @error('password')
-                        <span>{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="mb-3">
-                    <input type="submit" class="btn btn-primary form-control" id="btn-entrar" value="Entrar">
-                    <a href="{{route('cadastro.usuario')}}">Não tem conta? Cadastre-se!</a>
-                </div>
-            </form>
+                    <div class="mb-3">
+                        <input type="submit" class="btn btn-primary form-control" value="Entrar">
+                        <a href="{{ route('cadastro.usuario') }}" class="d-block mt-3">Não tem conta? Cadastre-se!</a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-            
+</div>
+
 </body>
 </html>
+

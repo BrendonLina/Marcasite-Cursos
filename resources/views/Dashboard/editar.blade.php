@@ -86,7 +86,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><a href="{{route('dashboard')}}">Voltar</a></button>
             <button type="submit" class="btn btn-primary" id="cadastrar-curso">Salvar</button>
         </div>
     </form>
@@ -94,3 +94,6 @@
 
 </body>
 </html>
+
+
+

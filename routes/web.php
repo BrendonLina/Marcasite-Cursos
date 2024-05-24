@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/destroy/{cursoId}', [DashboardController::class, 'destroy'])->name('excluir.curso');
 
     Route::get('/alunos', [UserController::class, 'index'])->name('meus.cursos');
+    Route::get('/alunos-inscritos/{userId}', [DashboardController::class, 'inscritos'])->name('inscritos');
 
     Route::get('/usuarios', [UserController::class, 'usuarios'])->name('usuarios');
     Route::get('/usuario/{userId}', [UserController::class, 'edit'])->name('editar.usuario');

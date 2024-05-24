@@ -193,33 +193,44 @@ class DashboardController extends Controller
 
      public function vitrineDeCurso()
      {
-        $cursos = Curso::all();
+        $cursos = Curso::where('vacancies', '>', 0)->get();
 
         return view('cursos.vitrine', compact('cursos'));
      }
 
-     public function cadastrarNoCurso($cursoId)
-     {
-    
-        $user = Auth::user();
-    
-        
-        if ($user) {
-           
-            $curso = Curso::findOrFail($cursoId);
-    
+    public function cadastrarNoCurso(Request $request, $cursoId)
+{
+    $user = Auth::user();
+
+    if ($user) {   
+        $curso = Curso::findOrFail($cursoId);
+  
+        if ($curso) {
             
-            if ($curso) {
-                
+            if ($curso->vacancies > 0) {
                 $user->cursos()->attach($curso);
-    
-               
+                $curso->decrement('vacancies');
+  
                 return redirect()->route('vitrine.curso')->with('success', 'Você foi inscrito no curso com sucesso!');
+            } else {
+                
+                return redirect()->route('vitrine.curso')->with('danger', 'Não há vagas disponíveis para este curso no momento.');
             }
         }
-    
-        
-        return redirect()->route('vitrine.curso')->with('danger', 'Falha ao inscrever no curso. Por favor, tente novamente.');
     }
+
+    return redirect()->route('vitrine.curso')->with('danger', 'Falha ao inscrever no curso. Por favor, tente novamente.');
+}
+
+    public function inscritos($cursoId) 
+    {
+    
+        $curso = Curso::findOrFail($cursoId);
+
+        $inscritos = $curso->users;
+
+        return view('alunos.inscritos', compact('inscritos'));
+    }
+
 
 }

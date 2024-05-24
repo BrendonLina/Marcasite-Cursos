@@ -138,7 +138,7 @@
                     <td> De: {{$curso->registrations}} até: {{$curso->registrations_up_to}} </td>
                     <td> {{$curso->vacancies}} </td>
                     <td>
-                        <button type="button" class="btn btn-primary action-button">Ver Inscritos</button>
+                        <button type="button" class="btn btn-primary action-button"><a href="{{route('inscritos', $curso->id)}}">Ver Inscritos</a></button>
                         <button type="button" class="btn btn-info action-button"><a href="{{route('editar.curso', $curso->id)}}">Editar Curso</a></button>
 
                         <form action="{{ route('excluir.curso', $curso->id) }}" method="POST" style="display: inline;">
