@@ -19,9 +19,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/cursos', [DashboardController::class, 'curso'])->name('cursos');
     Route::post('/cursos', [DashboardController::class, 'cadastrarCursos'])->name('cadastrar.cursos');
 
-    Route::get('/curso{cursoId}', [DashboardController::class, 'edit'])->name('editar.curso');
-    Route::put('/curso{cursoId}', [DashboardController::class, 'update'])->name('atualizar.curso');
-    Route::get('/alunos', [UserController::class, 'index'])->name('alunos');
+    Route::get('/vitrine-de-cursos', [DashboardController::class, 'vitrineDeCurso'])->name('vitrine.curso');
+    Route::post('/cadastrar-no-curso/{cursoId}', [DashboardController::class, 'cadastrarNoCurso'])->name('entrar.curso');
+    Route::get('/curso/{cursoId}', [DashboardController::class, 'edit'])->name('editar.curso');
+    Route::put('/curso/{cursoId}', [DashboardController::class, 'update'])->name('atualizar.curso');
+    Route::delete('/destroy/{cursoId}', [DashboardController::class, 'destroy'])->name('excluir.curso');
+
+    Route::get('/alunos', [UserController::class, 'index'])->name('meus.cursos');
+
+    Route::get('/usuarios', [UserController::class, 'usuarios'])->name('usuarios');
+    Route::get('/usuario/{userId}', [UserController::class, 'edit'])->name('editar.usuario');
+    Route::put('/usuario/{userId}', [UserController::class, 'update'])->name('atualizar.usuario');
+    Route::delete('/user/destroy/{userId}', [UserController::class, 'destroy'])->name('excluir.usuario');
 
 });
 

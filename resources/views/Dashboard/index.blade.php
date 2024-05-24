@@ -91,11 +91,25 @@
 <div class="sidebar-sticky">
     <h5 class="sidebar-heading">Sistema de Gerenciamento</h5>
     <ul class="list-group flex-column">
-        <li class="list-group-item">Dashboard</li>
-        <li class="list-group-item"><a href="{{route('cursos')}}">Cursos</a></li>
-        <li class="list-group-item"><a href="#">Usuários</a></li>
-        <li class="list-group-item"><a href="#">Configurações</a></li>
-        <li class="list-group-item"><a href="{{route('logout')}}">Sair</a></li>
+        @if(Auth()->user()->role_id == 1)
+            <li class="list-group-item">Dashboard</li>
+            <li class="list-group-item"><a href="{{route('cursos')}}">Cursos</a></li>
+            <li class="list-group-item"><a href="{{route('meus.cursos')}}">Meus Cursos</a></li>
+            <li class="list-group-item"><a href="{{route('vitrine.curso')}}">Vitrine de Cursos</a></li>
+            <li class="list-group-item"><a href="{{route('usuarios')}}">Usuários</a></li>
+            <li class="list-group-item"><a href="#">Configurações</a></li>
+            <li class="list-group-item"><a href="{{route('logout')}}">Sair</a></li>
+        @else
+            <li class="list-group-item">Dashboard</li>
+            <li class="list-group-item"><a href="{{route('cursos')}}">Cursos</a></li>
+            <li class="list-group-item"><a href="{{route('meus.cursos')}}">Meus Cursos</a></li>
+            <li class="list-group-item"><a href="{{route('vitrine.curso')}}">Vitrine de Cursos</a></li>
+            <li class="list-group-item"><a href="#">Configurações</a></li>
+            <li class="list-group-item"><a href="{{route('logout')}}">Sair</a></li>
+        @endif
+        
+        
+        
     </ul>
 </div>
 </nav>

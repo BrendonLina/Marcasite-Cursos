@@ -9,7 +9,8 @@
 </head>
 <body>
     <h1>Cadastro Aluno</h1>
-
+    <a href="{{route('dashboard')}}">Dashboard</a>
+    
     @if(session('danger'))
     <div class="alert alert-danger">
         {{ session('danger') }}

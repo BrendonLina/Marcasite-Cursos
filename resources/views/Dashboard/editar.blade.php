@@ -6,10 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
 
-    <title>Editar curso</title>
+    <title>Editar Usuario {{$user->name}}</title>
 </head>
 <body>
-    <h1>Editando curso</h1>
+    <h1>Editando Usuário {{$user->name}}</h1>
     <a href="{{route('dashboard')}}">Dashboard</a>
     
     @if(session('danger'))
@@ -44,55 +44,37 @@
 @endif
 
     <div class="modal-body">
-        <form action="{{route('atualizar.curso', $id)}}" method="POST" enctype="multipart/form-data" id="curso-form">
+        <form action="{{route('atualizar.usuario', $id)}}" method="POST" enctype="multipart/form-data" id="curso-form">
             @csrf
             @method('PUT')
             <div class="mb-3">
-                <label for="curso_nome" class="form-label">Nome*</label>
-                <input type="text" class="form-control" id="curso_nome" name="name" placeholder="Nome" value="{{$curso->name}}" >
+                <label for="nome" class="form-label">Nome*</label>
+                <input type="text" class="form-control" id="nome" name="name" placeholder="Nome" value="{{$user->name}}" >
                 @error('name')
                     <span>{{ $message }}</span>
                 @enderror
             </div>
             <div class="mb-3">
-                <label for="curso_valor" class="form-label">Valor*</label>
-                <input type="text" class="form-control" id="curso_valor" name="value" placeholder="R$" value="{{$curso->value}}">
-                @error('value')
+                <label for="email" class="form-label">Email*</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{$user->email}}">
+                @error('email')
                     <span>{{ $message }}</span>
                 @enderror
             </div>
             <div class="mb-3">
-                <label for="curso_vagas" class="form-label">Vagas*</label>
-                <input type="number" class="form-control" id="curso_vagas" name="vacancies" placeholder="300" value="{{$curso->vacancies}}">
-                @error('vacancies')
+                <label for="cpf" class="form-label">CPF*</label>
+                <input type="text" class="form-control" id="cpf" name="cpf" placeholder="999.999.999-99" value="{{$user->cpf}}">
+                @error('cpf')
                     <span>{{ $message }}</span>
                 @enderror
             </div>
             <div class="mb-3">
-                <label for="curso_inscricao" class="form-label">Inscrições de:</label>
-                <input type="date" class="form-control" id="curso_inscricao" name="registrations" placeholder="01/05/204" value="{{$curso->registrations}}">
-                @error('registrations')
-                    <span>{{ $message }}</span>
-                @enderror
-            </div>
-            <div class="mb-3">
-                <label for="curto_inscricao_ate" class="form-label">Até</label>
-                <input type="date" class="form-control" id="curto_inscricao_ate" name="registrations_up_to" placeholder="30/05/2024" value="{{$curso->registrations_up_to}}">
-                @error('registrations_up_to')
-                    <span>{{ $message }}</span>
-                @enderror
-            </div>
-            <div class="mb-3">
-                <label for="formFile" class="form-label">Default file input example</label>
-                <input class="form-control" type="file" name="image" id="formFile" value="{{$curso->image}}">
-                @error('image')
-                    <span>{{ $message }}</span>
-                @enderror
-            </div>
-            <div class="mb-3">
-                <label for="curso_descricao" class="form-label">Descrição*</label>
-                <textarea class="form-control" id="curso_descricao" name="description" rows="3" >{{$curso->description}}</textarea>
-                @error('description')
+                <select class="form-select" aria-label="Selecione a Role" name="role_id">
+                    @foreach($roles as $role)
+                        <option value="{{ $role->id }}">{{ $role->name }}</option>
+                    @endforeach
+                </select>
+                @error('role_id')
                     <span>{{ $message }}</span>
                 @enderror
             </div>

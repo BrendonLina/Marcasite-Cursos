@@ -82,44 +82,45 @@ class DashboardController extends Controller
 
             $data = $request->only([
                 'name', 'value', 'vacancies', 'registrations', 
-                'registrations_up_to', 'description', 'is_active'
+                'registrations_up_to', 'description'
             ]);
 
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
-            $data['image'] = $imagePath;
-        } else {
-            $data['image'] = $curso->image;
-        }
+            $data['is_active'] = $request->boolean('is_active', false);
+            
 
-        if($data['image'] != null)
-        {
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('images', 'public');
+                $data['image'] = $imagePath;
+            } else {
+                $data['image'] = $curso->image;
+            }
+
+            if($data['image'] != null)
+            {
+                $curso->update($data);
+
+                return redirect()->route('cursos')->with('success', [
+                    'title' => 'Parabéns!',
+                    'message' => 'O ' . $request->name . ' foi editado com sucesso!',
+                ]);
+            }
+
             $curso->update($data);
 
             return redirect()->route('cursos')->with('success', [
                 'title' => 'Parabéns!',
                 'message' => 'O ' . $request->name . ' foi editado com sucesso!',
             ]);
+
+        } catch (Exception $exception) {
+            return redirect()->back()->with('danger', [
+                'title' => 'Erro ao editar o curso:',
+                'message' => $exception->getMessage()
+            ]);
         }
-
-        $curso->update($data);
-
-        return redirect()->route('cursos')->with('success', [
-            'title' => 'Parabéns!',
-            'message' => 'O ' . $request->name . ' foi editado com sucesso!',
-        ]);
-
-    } catch (Exception $exception) {
-        return redirect()->back()->with('danger', [
-            'title' => 'Erro ao editar o curso:',
-            'message' => $exception->getMessage()
-        ]);
-    }
             
     }
     
-    
-
     /**
      * Remove the specified resource from storage.
      *
@@ -128,7 +129,14 @@ class DashboardController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $curso = Curso::find($id);
+
+        $curso->delete();
+        return redirect()->route('cursos')->with('success', [
+            'title' => 'Parabéns!',
+            'message' => 'Curso ' .  ' foi excluido com sucesso!',
+        ]);
+        
     }
 
     public function curso()
@@ -182,4 +190,36 @@ class DashboardController extends Controller
                     ]);
                 }
      }
+
+     public function vitrineDeCurso()
+     {
+        $cursos = Curso::all();
+
+        return view('cursos.vitrine', compact('cursos'));
+     }
+
+     public function cadastrarNoCurso($cursoId)
+     {
+    
+        $user = Auth::user();
+    
+        
+        if ($user) {
+           
+            $curso = Curso::findOrFail($cursoId);
+    
+            
+            if ($curso) {
+                
+                $user->cursos()->attach($curso);
+    
+               
+                return redirect()->route('vitrine.curso')->with('success', 'Você foi inscrito no curso com sucesso!');
+            }
+        }
+    
+        
+        return redirect()->route('vitrine.curso')->with('danger', 'Falha ao inscrever no curso. Por favor, tente novamente.');
+    }
+
 }

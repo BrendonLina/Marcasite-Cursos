@@ -45,4 +45,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'is_active' => 'boolean'
     ];
+
+    public function cursos()
+    {
+        return $this->belongsToMany(Curso::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
 }

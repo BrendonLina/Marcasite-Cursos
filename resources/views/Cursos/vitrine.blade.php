@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tabela de Cursos</title>
+    <title>Vitrine de Cursos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
 </head>
 <body>
+
 <div class="container mt-5 md-5">
-    <h2>Tabela de Cursos</h2>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Cadastrar Curso
-    </button>
+    <h2>Vitrine de Cursos</h2>
     <a href="{{route('dashboard')}}">Dashboard</a>
 
     @if ($errors->any())
@@ -107,11 +105,10 @@
     @endif
 
     @if(session('success'))
-        <div class="alert alert-success">
-            <strong>{{ session('success')['title'] }}</strong>
-            <p>{{ session('success')['message'] }}</p>
-        </div>
-    @endif
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
 
     <table class="table">
         <thead class="thead-dark">
@@ -138,13 +135,9 @@
                     <td> De: {{$curso->registrations}} até: {{$curso->registrations_up_to}} </td>
                     <td> {{$curso->vacancies}} </td>
                     <td>
-                        <button type="button" class="btn btn-primary action-button">Ver Inscritos</button>
-                        <button type="button" class="btn btn-info action-button"><a href="{{route('editar.curso', $curso->id)}}">Editar Curso</a></button>
-
-                        <form action="{{ route('excluir.curso', $curso->id) }}" method="POST" style="display: inline;">
+                        <form action="{{ route('entrar.curso', $curso->id) }}" method="POST" style="display: inline;">
                             @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger action-button" onclick="return confirm('Você tem certeza que deseja excluir este curso?');">Excluir Curso</button>
+                            <button type="submit" class="btn btn-warning action-button" onclick="return confirm('Você tem certeza que deseja entrar neste curso?');">Entrar no Curso</button>
                         </form>
 
                     </td>
